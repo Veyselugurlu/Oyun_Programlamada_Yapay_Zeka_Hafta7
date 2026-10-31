@@ -7,20 +7,15 @@ using UnityEngine;
 [RequireComponent(typeof(Brain))]
 public sealed class GenomeColors : MonoBehaviour
 {
-    public static readonly string[] Labels =
-    {
-        "Edge turner     [0, 1|2]",
-        "Always forward  [0, 0]",
-        "Spinner         [1|2, 1|2]",
-        "Turn, step off  [1|2, 0]",
-    };
+    public static readonly string[] Labels = { "Edge turner", "Always forward", "Spinner", "Turn, step off" };
+    public static readonly string[] Genes = { "[0, 1|2]", "[0, 0]", "[1|2, 1|2]", "[1|2, 0]" };
 
     public static readonly Color[] Colors =
     {
-        new Color(0.20f, 0.80f, 0.30f),
-        new Color(0.90f, 0.25f, 0.20f),
-        new Color(0.95f, 0.80f, 0.20f),
-        new Color(0.65f, 0.35f, 0.85f),
+        new Color32(0x1b, 0xaf, 0x7a, 0xff), // same hues as the report figures
+        new Color32(0xe3, 0x49, 0x48, 0xff),
+        new Color32(0xed, 0xa1, 0x00, 0xff),
+        new Color32(0x62, 0x50, 0xd6, 0xff),
     };
 
     private static readonly Color DeadColor = new Color(0.35f, 0.35f, 0.35f);

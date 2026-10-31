@@ -22,7 +22,8 @@ public sealed class StrategyLegend : MonoBehaviour
             GUI.color = GenomeColors.Colors[i];
             GUI.DrawTexture(new Rect(22, y + 3, 14, 14), Texture2D.whiteTexture);
             GUI.color = previous;
-            GUI.Label(new Rect(44, y, 270, 22), GenomeColors.Labels[i], labelStyle);
+            GUI.Label(new Rect(44, y, 150, 22), GenomeColors.Labels[i], labelStyle);
+            GUI.Label(new Rect(200, y, 115, 22), GenomeColors.Genes[i], labelStyle);
         }
     }
 }

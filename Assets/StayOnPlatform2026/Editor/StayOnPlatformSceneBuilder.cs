@@ -28,7 +28,7 @@ public static class StayOnPlatformSceneBuilder
     {
         Directory.CreateDirectory(MaterialDir);
         Material platformMat = CreateMaterial("Platform", new Color(0.55f, 0.78f, 0.55f));
-        Material deathMat = CreateMaterial("DeathFloor", new Color(0.55f, 0.12f, 0.12f));
+        Material deathMat = CreateMaterial("DeathFloor", new Color(0.30f, 0.10f, 0.11f));
         Material botMat = CreateMaterial("Bot", new Color(0.25f, 0.45f, 0.85f));
         Material eyesMat = CreateMaterial("Eyes", new Color(0.08f, 0.08f, 0.08f));
 
@@ -125,8 +125,8 @@ public static class StayOnPlatformSceneBuilder
 
         var cameraGo = new GameObject("Main Camera") { tag = "MainCamera" };
         Camera camera = cameraGo.AddComponent<Camera>();
-        camera.transform.SetPositionAndRotation(new Vector3(0f, 7.5f, -7.5f), Quaternion.Euler(45f, 0f, 0f));
-        camera.fieldOfView = 50f;
+        camera.transform.SetPositionAndRotation(new Vector3(0f, 11f, -7f), Quaternion.Euler(57f, 0f, 0f));
+        camera.fieldOfView = 45f;
         camera.clearFlags = CameraClearFlags.SolidColor;
         camera.backgroundColor = new Color(0.12f, 0.13f, 0.16f);
 
