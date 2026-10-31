@@ -26,8 +26,8 @@ public sealed class DNA
     {
         if (parentA == null || parentB == null) throw new ArgumentNullException("parent");
         // Two-gene one-point crossover: ground policy from A, edge policy from B.
-        // TODO A: replace with a true one-point crossover from A and B.
-        return parentA.Copy();
+        // With two genes the only cut point lies between g0 and g1.
+        return new DNA(parentA.GetGene(0), parentB.GetGene(1));
     }
 
     public void Mutate(float probabilityPerGene)
