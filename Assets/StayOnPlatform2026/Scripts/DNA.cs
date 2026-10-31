@@ -37,8 +37,9 @@ public sealed class DNA
         {
             if (UnityEngine.Random.value >= p) continue;
             // Guarantee a different value rather than occasionally 'mutating' to itself.
-            // TODO B: choose a DIFFERENT action gene with probability p.
-            // Deliberately left unchanged for the starter activity.
+            // Range(1, 3) returns 1 or 2, so (gene + shift) % 3 is always another action in {0, 1, 2}.
+            int shift = UnityEngine.Random.Range(1, 3);
+            genes[i] = (genes[i] + shift) % 3;
         }
     }
 
