@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 7475391072496890070}
   - component: {fileID: 6605900225508217946}
   - component: {fileID: 7189641486606629752}
+  - component: {fileID: 8964795511657114389}
   m_Layer: 0
   m_Name: Bot
   m_TagString: Untagged
@@ -163,6 +164,18 @@ MonoBehaviour:
   forwardSpeed: 2.4
   turnDegreesPerSecond: 180
   movingFitnessWeight: 0.55
+--- !u!114 &8964795511657114389
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4546239358677412463}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4d09df8e0cd7c64ea7ed712ec1c23be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GenomeColors
 --- !u!1 &5400629716804996317
 GameObject:
   m_ObjectHideFlags: 0

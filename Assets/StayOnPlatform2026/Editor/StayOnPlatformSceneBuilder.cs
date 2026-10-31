@@ -10,7 +10,7 @@ using UnityEngine;
 ///   DeathFloor        Cube + BoxCollider + DeathZone
 ///   Bot (prefab)      Capsule + CapsuleCollider + Rigidbody (X/Z rotation frozen) + Brain
 ///     Eyes_ProbeOrigin  Cube without collider, local (0, 0.52, 0.40)
-///   PopulationManager empty object + PopulationManager
+///   PopulationManager empty object + PopulationManager (+ StrategyLegend, ExperimentDriver)
 ///   Main Camera, Directional Light
 /// </summary>
 public static class StayOnPlatformSceneBuilder
@@ -42,6 +42,31 @@ public static class StayOnPlatformSceneBuilder
     {
         int code = 0;
         try { Build(); }
+        catch (System.Exception e) { Debug.LogException(e); code = 1; }
+        EditorApplication.Exit(code);
+    }
+
+    [MenuItem("Tools/AI Games Week 3/Build Windows Player")]
+    public static void BuildPlayer() => TryBuildPlayer();
+
+    private static bool TryBuildPlayer()
+    {
+        var report = BuildPipeline.BuildPlayer(new BuildPlayerOptions
+        {
+            scenes = new[] { ScenePath },
+            locationPathName = "Builds/StayOnPlatform/StayOnPlatform.exe",
+            target = BuildTarget.StandaloneWindows64,
+            options = BuildOptions.None
+        });
+        Debug.Log("StayOnPlatform: build " + report.summary.result);
+        return report.summary.result == UnityEditor.Build.Reporting.BuildResult.Succeeded;
+    }
+
+    /// <summary>Batch-mode entry point (-executeMethod StayOnPlatformSceneBuilder.BuildSceneAndPlayerBatch).</summary>
+    public static void BuildSceneAndPlayerBatch()
+    {
+        int code = 0;
+        try { Build(); if (!TryBuildPlayer()) code = 1; }
         catch (System.Exception e) { Debug.LogException(e); code = 1; }
         EditorApplication.Exit(code);
     }
@@ -83,6 +108,7 @@ public static class StayOnPlatformSceneBuilder
 
         Brain brain = bot.AddComponent<Brain>();
         brain.eyes = eyes.transform;
+        bot.AddComponent<GenomeColors>();
 
         PrefabUtility.SaveAsPrefabAsset(bot, PrefabPath);
         Object.DestroyImmediate(bot);
@@ -128,6 +154,10 @@ public static class StayOnPlatformSceneBuilder
         PopulationManager manager = managerGo.AddComponent<PopulationManager>();
         manager.botPrefab = botPrefab;
         manager.safePlatform = platform.GetComponent<Collider>();
+        managerGo.AddComponent<StrategyLegend>();
+        var driver = new SerializedObject(managerGo.AddComponent<ExperimentDriver>()); // idle without command-line switches
+        driver.FindProperty("manager").objectReferenceValue = manager;
+        driver.ApplyModifiedPropertiesWithoutUndo();
 
         Directory.CreateDirectory(Root + "/Scenes");
         EditorSceneManager.SaveScene(scene, ScenePath);
