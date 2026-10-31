@@ -19,6 +19,13 @@ public sealed class PopulationManager : MonoBehaviour
     public bool fixedSeed = true;
     public int seed = 2026;
 
+    [Header("Experiment")]
+    [Tooltip("Off = starter baseline: elites are copied, every other genome is random again (no inheritance).")]
+    public bool inheritGenes = true;
+
+    /// <summary>Raised once per generation with the generation number and the bots sorted by fitness.</summary>
+    public event Action<int, IReadOnlyList<Brain>> GenerationEvaluated;
+
     private readonly List<Brain> population = new List<Brain>();
     private float elapsed;
     private int generation = 1;
@@ -90,6 +97,7 @@ public sealed class PopulationManager : MonoBehaviour
         Debug.Log($"Generation {generation}: avg={lastAverageFitness:F2}, " +
                   $"best={lastBestFitness:F2}, alive={lastSurvivors}/{population.Count}, " +
                   $"bestDNA={sorted[0].dna}");
+        GenerationEvaluated?.Invoke(generation, sorted);
 
         List<DNA> nextGenomes = BuildNextGenomes(sorted);
         foreach (Brain bot in population) Destroy(bot.gameObject);
@@ -114,6 +122,11 @@ public sealed class PopulationManager : MonoBehaviour
         int pool = Mathf.Max(2, sorted.Count / 2);
         while (children.Count < populationSize)
         {
+            if (!inheritGenes)
+            {
+                children.Add(DNA.RandomGenome());
+                continue;
+            }
             DNA a = sorted[UnityEngine.Random.Range(0, pool)].dna;
             DNA b = sorted[UnityEngine.Random.Range(0, pool)].dna;
             DNA child = DNA.Cross(a, b);
