@@ -1,0 +1,53 @@
+using System;
+using UnityEngine;
+
+// Two integer genes. Each gene encodes: 0 = forward, 1 = left, 2 = right.
+[Serializable]
+public sealed class DNA
+{
+    private readonly int[] genes;
+
+    public DNA(int groundAction, int edgeAction)
+    {
+        genes = new[] { CheckAction(groundAction), CheckAction(edgeAction) };
+    }
+
+    public int GetGene(int index)
+    {
+        if (index < 0 || index >= genes.Length) throw new ArgumentOutOfRangeException(nameof(index));
+        return genes[index];
+    }
+
+    public DNA Copy() => new DNA(genes[0], genes[1]);
+
+    public static DNA RandomGenome() => new DNA(UnityEngine.Random.Range(0, 3), UnityEngine.Random.Range(0, 3));
+
+    public static DNA Cross(DNA parentA, DNA parentB)
+    {
+        if (parentA == null || parentB == null) throw new ArgumentNullException("parent");
+        // Two-gene one-point crossover: ground policy from A, edge policy from B.
+        // With two genes the only cut point lies between g0 and g1.
+        return new DNA(parentA.GetGene(0), parentB.GetGene(1));
+    }
+
+    public void Mutate(float probabilityPerGene)
+    {
+        float p = Mathf.Clamp01(probabilityPerGene);
+        for (int i = 0; i < genes.Length; i++)
+        {
+            if (UnityEngine.Random.value >= p) continue;
+            // Guarantee a different value rather than occasionally 'mutating' to itself.
+            // Range(1, 3) returns 1 or 2, so (gene + shift) % 3 is always another action in {0, 1, 2}.
+            int shift = UnityEngine.Random.Range(1, 3);
+            genes[i] = (genes[i] + shift) % 3;
+        }
+    }
+
+    private static int CheckAction(int action)
+    {
+        if (action < 0 || action > 2) throw new ArgumentOutOfRangeException(nameof(action));
+        return action;
+    }
+
+    public override string ToString() => "[" + genes[0] + ", " + genes[1] + "]";
+}
